@@ -6,6 +6,7 @@ from googleapiclient.errors import HttpError
 from dotenv import load_dotenv
 import os.path
 from openai import OpenAI
+import openai
 
 load_dotenv()
 
@@ -40,8 +41,16 @@ def main():
         document = service.documents().get(documentId=DOCUMENT_ID).execute()
         print(f"The title of the document is: {document.get('title')}")
         
+        # Add ChatGPT API request
+        openai.api_key = os.getenv("OPENAI_API_KEY")  # Ensure your API key is set in the environment
+        chatgpt_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Specify the model you want to use
+            messages=[
+                {"role": "user", "content": "What is the weather like today?"}  # Example user message
+            ]
+        )
+        print("ChatGPT response:", chatgpt_response.choices[0].message['content'])
         
-
         requests = [
             {
                 'insertText': {
@@ -49,7 +58,7 @@ def main():
                         'index': 150,
                         'tabId': "t.m16nn6qb7h0"
                     },
-                    'text': "Hello my name is hello"
+                    'text': "Hello this is an insert"
                 }
             }
         ]
@@ -60,6 +69,8 @@ def main():
         
     except HttpError as err:
         print(f"An error occurred: {err}")
+
+
 
 if __name__ == "__main__":
     main()
