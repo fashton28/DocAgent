@@ -14,9 +14,10 @@ api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
     raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
 
-# Update scopes to include both read and write permissions
+# Update scopes to the correct format
 SCOPES = [
-    "https://www.googleapis.com/auth/documents",  # Full access to documents
+    'https://www.googleapis.com/auth/documents',
+    'https://www.googleapis.com/auth/drive.file'
 ]
 
 DOCUMENT_ID = "1-Jx57aROf-10iVL1WVai2olCuMmT6er-DoVgsekXnXs"
@@ -37,7 +38,7 @@ def get_all_paragraphs(service, document_id):
     document = service.documents().get(documentId=document_id).execute()
     content = document.get('body').get('content')
     
-    paragraphs = []
+    paragraphs = [] #Creating this does not work
     current_index = 1  # Google Docs indices start at 1
     
     for element in content:
@@ -59,6 +60,11 @@ def get_all_paragraphs(service, document_id):
 
 def main():
     creds = None
+    # Update the path to where your credentials.json actually is
+    CREDENTIALS_PATH = "credentials.json"  # If it's in the root directory
+    # or use absolute path if needed
+    # CREDENTIALS_PATH = "/Users/fashton/Desktop/DocAgent/credentials.json"
+
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
     
@@ -67,7 +73,7 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "DocAgent/credentials.json", SCOPES
+                CREDENTIALS_PATH, SCOPES
             )
             creds = flow.run_local_server(port=0)
         
@@ -78,12 +84,18 @@ def main():
         service = build("docs", "v1", credentials=creds)
         
         # Get all paragraphs with their indices
+        paragraphsChoose = []
+        textChoose = []
         paragraphs = get_all_paragraphs(service, DOCUMENT_ID)
         for index, text in paragraphs:
+            paragraphsChoose.append(index)
+            textChoose.append(text)#Potentially change into dictionary
             print(f"Index {index}:", text)
         # Retrieve the documents contents
         document = service.documents().get(documentId=DOCUMENT_ID).execute()
         print(f"The title of the document is: {document.get('title')}")
+        
+        
         
         # Initialize the OpenAI client with the pre-verified API key
         client = OpenAI(api_key=api_key)
@@ -101,16 +113,16 @@ def main():
         # Print the response (updated to match new response format)
         agentResponse = (completion.choices[0].message.content)
         
-        
+        paragraph = int(input("Write down the paragraph you want to analyze? "))
         
         requests = [
             {
                 'insertText': {
                     'location': {
-                        'index': 29,
-                        'tabId': "t.kg44gzaglg9w"
+                        'index': paragraphsChoose[paragraph] + len(textChoose[paragraph]),
+                        'tabId': "t.0"
                     },
-                    'text': "HELLO"
+                    'text': "THIS IS A TEST"
                 }
             }
         ]
