@@ -99,30 +99,39 @@ def main():
         
         # Initialize the OpenAI client with the pre-verified API key
         client = OpenAI(api_key=api_key)
-        
+        paragraph = int(input("Write down the paragraph you want to analyze? ")) - 1
+        action  = (input("What action do you want to Perform? Refinement or Volcabulary "))
         # Make a chat completion request using the new client format
         completion = client.chat.completions.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "You are a an essay writer."},
-                {"role": "user", "content": "write a poem about Business and tech. Keep it short"}
+                {"role": "system", "content": "You are a an essay reviewer. Your job is to refine paragraphs in essays."},
+                {"role": "user", "content": f"Please refine the following paragraph: {textChoose[paragraph]}. Focus on this: {action}"}
             ],
-            max_tokens= 80
+            max_tokens= 100
         )
 
         # Print the response (updated to match new response format)
         agentResponse = (completion.choices[0].message.content)
         
-        paragraph = int(input("Write down the paragraph you want to analyze? "))
+       
         
         requests = [
             {
+                'deleteContentRange': {
+                    'range': {
+                        'startIndex': paragraphsChoose[paragraph],
+                        'endIndex': paragraphsChoose[paragraph] + len(textChoose[paragraph])
+                    }
+                }
+            },
+            {
                 'insertText': {
                     'location': {
-                        'index': paragraphsChoose[paragraph] + len(textChoose[paragraph]),
+                        'index': paragraphsChoose[paragraph],
                         'tabId': "t.0"
                     },
-                    'text': "THIS IS A TEST"
+                    'text': f"{agentResponse}"
                 }
             }
         ]
@@ -131,7 +140,6 @@ def main():
             documentId=DOCUMENT_ID, body={'requests': requests}).execute()
         
         print("Text inserted successfully")
-        
         
     except HttpError as err:
         print(f"An error occurred: {err}")
