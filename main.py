@@ -9,6 +9,9 @@ from openai import OpenAI
 
 load_dotenv()
 
+# Your AI-AGENT Writing Assitant.
+#Writing and writing-knnots --> If you're thinking without writing, you only think you're thinking.
+
 # Verify API key is available immediately after loading
 api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
@@ -96,25 +99,22 @@ def main():
         print(f"The title of the document is: {document.get('title')}")
         
         
-        
         # Initialize the OpenAI client with the pre-verified API key
         client = OpenAI(api_key=api_key)
         paragraph = int(input("Write down the paragraph you want to analyze? ")) - 1
-        action  = (input("What action do you want to Perform? Refinement or Volcabulary "))
+        action  = (input("What action do you want to Perform? "))
         # Make a chat completion request using the new client format
         completion = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a an essay reviewer. Your job is to refine paragraphs in essays."},
-                {"role": "user", "content": f"Please refine the following paragraph: {textChoose[paragraph]}. Focus on this: {action}"}
+                {"role": "user", "content": f"Please refine the following paragraph: {textChoose[paragraph]}. Notes: {action}"}
             ],
             max_tokens= 100
         )
-
+        
         # Print the response (updated to match new response format)
         agentResponse = (completion.choices[0].message.content)
-        
-       
         
         requests = [
             {
