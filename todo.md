@@ -1,5 +1,11 @@
-- Look for index of text --> Replace with New, updated and refined text
+- Add comments to program
+- Your idea companion. --> Give feed back on where to take the text. 
+- Writing Research paper from scratch with this tool
 
-- For loop --> replace each paragraph with new paragraph. --> Run find text function two times.
+IDEAS
 
-    - Second time --> Replace text with GPT refinement.
+# Your AI-AGENT Writing Assitant.
+#We don't do the writing for you. We are all about the ideation and enhancing your creative process.
+#Learn as you write
+#Writing and writing-knnots --> If you're thinking without writing, you only think you're thinking.
+#Write to think. Think to write. 

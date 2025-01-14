@@ -7,24 +7,33 @@ from dotenv import load_dotenv
 import os
 from openai import OpenAI
 
+#Load environment variables
 load_dotenv()
 
 # Your AI-AGENT Writing Assitant.
+#We don't do the writing for you. We are all about the ideation and enhancing your creative process.
+#Learn as you write
 #Writing and writing-knnots --> If you're thinking without writing, you only think you're thinking.
+#Write to think. Think to write. 
+
 
 # Verify API key is available immediately after loading
 api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
+    #Raise Value when API KEY not found.
     raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
 
-# Update scopes to the correct format
+# Update scopes to the correct format --> Scopes define the access the API has to our Google Doc files.
 SCOPES = [
     'https://www.googleapis.com/auth/documents',
     'https://www.googleapis.com/auth/drive.file'
 ]
 
+
 DOCUMENT_ID = "1-Jx57aROf-10iVL1WVai2olCuMmT6er-DoVgsekXnXs"
 
+
+#Getting
 def get_end_index(service, document_id):
     document = service.documents().get(documentId=document_id).execute()
     content = document.get('body').get('content')
@@ -33,7 +42,7 @@ def get_end_index(service, document_id):
     for element in content:
         if 'endIndex' in element:
             end_index = max(end_index, element['endIndex'])
-    
+    print(f"this is the end Index: {end_index}")
     return end_index
 
 def get_all_paragraphs(service, document_id):
@@ -97,6 +106,7 @@ def main():
         # Retrieve the documents contents
         document = service.documents().get(documentId=DOCUMENT_ID).execute()
         print(f"The title of the document is: {document.get('title')}")
+        get_end_index(service, DOCUMENT_ID)
         
         
         # Initialize the OpenAI client with the pre-verified API key
@@ -110,7 +120,7 @@ def main():
                 {"role": "system", "content": "You are a an essay reviewer. Your job is to refine paragraphs in essays."},
                 {"role": "user", "content": f"Please refine the following paragraph: {textChoose[paragraph]}. Notes: {action}"}
             ],
-            max_tokens= 100
+            max_tokens= 200
         )
         
         # Print the response (updated to match new response format)
