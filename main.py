@@ -50,7 +50,7 @@ def get_all_paragraphs(service, document_id):
     document = service.documents().get(documentId=document_id).execute()
     content = document.get('body').get('content')
     
-    paragraphs = [] #Creating this does not work
+    paragraphs = [] 
     current_index = 1  # Google Docs indices start at 1
     
     for element in content:

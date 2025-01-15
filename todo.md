@@ -9,3 +9,6 @@ IDEAS
 #Learn as you write
 #Writing and writing-knnots --> If you're thinking without writing, you only think you're thinking.
 #Write to think. Think to write. 
+
+-> Writing a whole reaserach paper with the program
+-> Move everything to JS code to start building chrome extension.
