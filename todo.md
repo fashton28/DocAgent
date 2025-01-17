@@ -12,3 +12,15 @@ IDEAS
 
 -> Writing a whole reaserach paper with the program
 -> Move everything to JS code to start building chrome extension.
+
+
+Using this same code to build background automation --> The program can be run with a single command and no input
+
+Just type your prompt at the end of the page before runnign the program, type the command, and you will see the response just below your prompt.
+
+Possible use cases:
+
+- Ideation for Essays
+- Help with phrasing, vocabulary and overall efficieny during tests.
+
+

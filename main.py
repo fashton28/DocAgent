@@ -73,7 +73,7 @@ def get_all_paragraphs(service, document_id):
 def main():
     creds = None
     # Update the path to where your credentials.json actually is
-    CREDENTIALS_PATH = "credentials.json"  # If it's in the root directory
+    CREDENTIALS_PATH = "/Users/fashton/Desktop/DocAgent/DocAgent/credentials.json"  # If it's in the root directory
     # or use absolute path if needed
     # CREDENTIALS_PATH = "/Users/fashton/Desktop/DocAgent/credentials.json"
 
