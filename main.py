@@ -111,14 +111,15 @@ def main():
         
         # Initialize the OpenAI client with the pre-verified API key
         client = OpenAI(api_key=api_key)
-        paragraph = int(input("Write down the paragraph you want to analyze? ")) - 1
-        action  = (input("What action do you want to Perform? "))
+        # paragraph = int(input("Write down the paragraph you want to analyze? ")) - 1
+        # action  = (input("What action do you want to Perform? "))
         # Make a chat completion request using the new client format
+        
         completion = client.chat.completions.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "You are a an essay reviewer. Your job is to refine paragraphs in essays."},
-                {"role": "user", "content": f"Please refine the following paragraph: {textChoose[paragraph]}. Notes: {action}"}
+                {"role": "system", "content": "You generate greate ideas for people to get unstuck while writing. Perhaps I get stuck because i don't know what to write about, you help me with ideas."},
+                {"role": "user", "content": f"Please give me some ideas in the form of bullet points based on the following prompt: {textChoose[len(textChoose) - 1]}. "}
             ],
             max_tokens= 200
         )
@@ -127,18 +128,18 @@ def main():
         agentResponse = (completion.choices[0].message.content)
         
         requests = [
-            {
-                'deleteContentRange': {
-                    'range': {
-                        'startIndex': paragraphsChoose[paragraph],
-                        'endIndex': paragraphsChoose[paragraph] + len(textChoose[paragraph])
-                    }
-                }
-            },
+            # {
+            #     'deleteContentRange': {
+            #         'range': {
+            #             'startIndex': paragraphsChoose[paragraph],
+            #             'endIndex': paragraphsChoose[paragraph] + len(textChoose[paragraph])
+            #         }
+            #     }
+            # },
             {
                 'insertText': {
                     'location': {
-                        'index': paragraphsChoose[paragraph],
+                        'index': get_end_index(service, DOCUMENT_ID) - 1 ,
                         'tabId': "t.0"
                     },
                     'text': f"{agentResponse}"
